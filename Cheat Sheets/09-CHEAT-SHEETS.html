@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MD-102 cheat sheets - print pack</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: #eef2f7;
+    color: #14181f;
+    font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+  }
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 18px;
+    background: #fff;
+    border-bottom: 1px solid #d8dee9;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+  .toolbar strong { font-size: .95rem; }
+  .toolbar span { font-size: .76rem; color: #4b5563; }
+  .toolbar button {
+    padding: 8px 14px;
+    border: 0;
+    border-radius: 8px;
+    background: #0e7490;
+    color: #fff;
+    font: inherit;
+    font-size: .84rem;
+    font-weight: 650;
+    cursor: pointer;
+  }
+  .toolbar button:hover { background: #155e75; }
+  .pack { padding: 18px; display: grid; gap: 18px; justify-content: center; }
+  .sheet {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 8mm;
+    background: #fff;
+    box-shadow: 0 10px 30px -18px rgba(16, 24, 40, .55);
+    border: 1px solid #e2e8f0;
+    font-size: 6pt;
+    line-height: 1.10;
+    column-count: 2;
+    column-gap: 6mm;
+    column-fill: auto;
+  }
+  h1 {
+    margin: 0 0 1.5mm;
+    padding-bottom: 1mm;
+    border-bottom: 1.4pt solid #0e7490;
+    font-size: 12pt;
+    line-height: 1.12;
+    letter-spacing: -.01em;
+    column-span: all;
+  }
+  h2 {
+    margin: 0 0 .35mm;
+    padding: .7mm 0 .45mm;
+    border-bottom: .7pt solid #cbd5e1;
+    font-size: 8.2pt;
+    line-height: 1.12;
+    color: #0e7490;
+    break-after: avoid;
+  }
+  p { margin: 0 0 1.2mm; }
+  p.note {
+    margin: 1mm 0 1.5mm;
+    font-size: 6pt;
+    color: #4b5563;
+  }
+  code {
+    font-family: "Cascadia Mono", Consolas, monospace;
+    font-size: .92em;
+    background: #eef2f9;
+    padding: 0 .5mm;
+    border-radius: 1mm;
+  }
+  table {
+    width: 100%;
+    margin: 0 0 1.1mm;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+  thead { display: table-header-group; }
+  th {
+    padding: .6mm .95mm;
+    background: #e0f2fe;
+    border: .5pt solid #bae6fd;
+    font-size: 6.3pt;
+    font-weight: 700;
+    letter-spacing: .03em;
+    text-align: left;
+    text-transform: uppercase;
+    color: #155e75;
+  }
+  td {
+    padding: .45mm .85mm;
+    border: .5pt solid #d7deea;
+    vertical-align: top;
+    overflow-wrap: anywhere;
+  }
+  td:first-child { width: 27%; font-weight: 600; color: #0f172a; }
+  tr { break-inside: avoid; }
+  ul { margin: 0 0 1.2mm; padding-left: 3.4mm; }
+  li { margin: 0 0 .4mm; }
+  footer {
+    column-span: all;
+    margin-top: 1.2mm;
+    padding-top: .8mm;
+    border-top: .5pt solid #cbd5e1;
+    font-size: 5.6pt;
+    color: #6b7280;
+  }
+  @media print {
+    body { background: #fff; }
+    .toolbar { display: none; }
+    .pack { display: block; padding: 0; }
+    .sheet {
+      width: auto;
+      min-height: 0;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      box-shadow: none;
+      break-after: page;
+    }
+    .sheet:last-of-type { break-after: auto; }
+    @page { size: A4 portrait; margin: 7mm; }
+  }
+</style>
+</head>
+<body>
+<header class="toolbar">
+  <div><strong>MD-102 cheat sheets</strong> &middot; <span>five sheets, one A4 page each</span></div>
+  <button type="button" onclick="window.print()">Print all five sheets</button>
+</header>
+<main class="pack">
+<article class="sheet" id="sheet-1" aria-label="Windows deployment">
+<h1>MD-102 cheat sheet 1/5 — Windows deployment</h1>
+<p class="note"><em>One page. Facts snapshot 2026-11; verify current behaviour on Microsoft Learn before the exam.</em></p>
+<h2>Join types: the decision that changes everything</h2>
+<table><thead><tr><th>Join type</th><th>What it gives you</th><th>Pick it when</th></tr></thead><tbody><tr><td>Entra registered</td><td>Device identity for SSO and Conditional Access; no MDM</td><td>Personal BYOD; app protection only; no device control needed</td></tr><tr><td>Entra joined</td><td>Cloud device identity plus Intune MDM</td><td>Corporate device with no on-premises dependency</td></tr><tr><td>Entra hybrid joined</td><td>AD domain membership plus Entra identity and Intune</td><td>Kerberos, on-premises shares, legacy apps, or Group Policy still needed</td></tr></tbody></table>
+<ul><li>Check a device with <code>dsregcmd /status</code>: <code>AzureAdJoined</code>, <code>DomainJoined</code>, <code>EnterpriseJoined</code>.</li><li>Registered is identity only; joined is identity plus management; hybrid is both directories.</li><li>Hybrid join needs Entra Connect sync, a service connection point (SCP), and line of sight to a domain controller at join time.</li></ul>
+<h2>Enrolment methods</h2>
+<table><thead><tr><th>Method</th><th>Best for</th><th>Watch out</th></tr></thead><tbody><tr><td>Automatic enrolment (MDM user scope)</td><td>Entra joined devices at first sign-in</td><td>Needs licences and MDM scope set to All or a group</td></tr><tr><td>Windows Autopilot</td><td>New corporate hardware, zero touch</td><td>The hardware hash must be registered first</td></tr><tr><td>Bulk enrolment (provisioning package)</td><td>Existing devices with no hash</td><td>The package carries a short-lived enrolment token</td></tr><tr><td>GPO automatic enrolment</td><td>Hybrid joined domain devices</td><td>Needs the GPO and a domain-joined device</td></tr><tr><td>Co-management</td><td>ConfigMgr estates moving to Intune</td><td>Workloads move one at a time</td></tr><tr><td>Manual (Access work or school)</td><td>One-off or lab devices</td><td>Not a scale strategy</td></tr></tbody></table>
+<ul><li>Enrolment restrictions: platform, minimum and maximum OS version, personally owned device block, and a per-user device limit (default 15).</li><li>Corporate identifiers and device categories support ownership reporting; they do not enrol anything.</li></ul>
+<h2>Autopilot profiles</h2>
+<table><thead><tr><th>Mode</th><th>User at OOBE</th><th>Joins</th><th>Typical use</th></tr></thead><tbody><tr><td>User-driven</td><td>Yes, signs in</td><td>Entra joined or hybrid</td><td>Standard knowledge-worker laptop</td></tr><tr><td>Pre-provisioning (white glove)</td><td>Technician first, user later</td><td>Entra joined or hybrid</td><td>IT prepares the device before shipping</td></tr><tr><td>Self-deploying</td><td>No user</td><td>Entra joined only</td><td>Kiosk, signage, shared device</td></tr><tr><td>Device preparation</td><td>Yes</td><td>Entra joined only</td><td>Simpler, newer user-driven flow</td></tr></tbody></table>
+<ul><li>Every mode needs: registered hash, device in an assigned group, a profile, network, and an Intune licence.</li><li>Self-deploying needs TPM 2.0 and cannot use hybrid join. Pre-provisioning needs TPM 2.0 and wired or wireless network.</li><li>ESP stages: device preparation, device setup, account setup. Track required apps and block until installed.</li><li>Autopilot Reset removes user data and apps, keeps Autopilot registration and Intune enrolment, and returns to OOBE.</li><li>Troubleshoot: normal OOBE with no Autopilot screen means the hash or profile assignment is missing, not a profile setting.</li></ul>
+<h2>Windows 365 and Azure Virtual Desktop</h2>
+<table><thead><tr><th>Option</th><th>What it is</th><th>Key limits</th></tr></thead><tbody><tr><td>Windows 365 Business</td><td>Cloud PC on a Microsoft-hosted network</td><td>No Azure network connection, no hybrid join, small-tenant ceiling</td></tr><tr><td>Windows 365 Enterprise</td><td>Cloud PC with provisioning policies</td><td>Supports ANC, hybrid join, custom images</td></tr><tr><td>Windows 365 Frontline</td><td>Shared Cloud PCs for shift workers</td><td>One licence covers several users, not concurrent sessions</td></tr><tr><td>Windows 365 Boot</td><td>Device boots straight into the Cloud PC</td><td>Windows 11 endpoint, Entra joined</td></tr><tr><td>Azure Virtual Desktop</td><td>Your own host pools in Azure</td><td>You manage images, hosts, scaling, and FSLogix</td></tr></tbody></table>
+<ul><li>A Windows 365 Enterprise provisioning policy = image, network, region, join type, and assignment.</li><li>An ANC needs a virtual network, a subnet, and either domain join credentials or Entra join.</li><li>AVD objects: host pool (pooled or personal), application group, workspace, session hosts, scaling plan.</li><li>Multi-session Windows 11 Enterprise lets several users share a host; FSLogix containers roam profiles.</li></ul>
+<h2>Upgrade and activation</h2>
+<ul><li>Windows subscription activation: a Microsoft 365 E3/E5 licence steps Windows Pro up to Enterprise with no product key.</li><li>In-place upgrade keeps apps and files; use a feature update policy, or a task sequence when the upgrade needs custom steps.</li><li>Feature update policy targets a Windows version with a rollout date and a deadline.</li><li>Readiness: Endpoint analytics reports app and driver blockers before a Windows 11 rollout.</li><li>Provisioning packages (Windows Configuration Designer) can join, enrol, and apply a small set of settings; they are not a replacement for Autopilot profiles.</li></ul>
+<h2>Deployment decision map</h2>
+<table><thead><tr><th>Requirement in the stem</th><th>Answer to reach for</th></tr></thead><tbody><tr><td>Zero touch, new hardware, cloud only</td><td>Autopilot user-driven, Entra joined</td></tr><tr><td>Zero touch but Kerberos needed</td><td>Autopilot hybrid joined</td></tr><tr><td>No user at OOBE</td><td>Autopilot self-deploying</td></tr><tr><td>IT prepares before shipping</td><td>Autopilot pre-provisioning</td></tr><tr><td>Contractor desktop, no hardware</td><td>Windows 365 Enterprise or AVD</td></tr><tr><td>On-premises access from a Cloud PC</td><td>ANC with hybrid join</td></tr><tr><td>Existing device with no hash</td><td>Provisioning package or GPO enrolment</td></tr><tr><td>Fixed feature set for years</td><td>Windows LTSC</td></tr></tbody></table>
+<footer>MD-102 cheat sheet 1 of 5 &middot; five A4 pages &middot; unofficial study aid &middot; snapshot 2026-11</footer>
+</article>
+<article class="sheet" id="sheet-2" aria-label="Microsoft Intune">
+<h1>MD-102 cheat sheet 2/5 — Microsoft Intune</h1>
+<p class="note"><em>One page. Facts snapshot 2026-11; verify current behaviour on Microsoft Learn before the exam.</em></p>
+<h2>Service map</h2>
+<table><thead><tr><th>Area</th><th>What lives there</th></tr></thead><tbody><tr><td>Devices</td><td>Enrolment, compliance, configuration, scripts, remote actions</td></tr><tr><td>Apps</td><td>App types, app protection, app configuration, install status</td></tr><tr><td>Endpoint security</td><td>Antivirus, firewall, ASR, EDR, disk encryption, baselines, LAPS</td></tr><tr><td>Reports</td><td>Compliance, configuration, apps, updates, encryption, Endpoint analytics</td></tr><tr><td>Tenant administration</td><td>Roles, scope tags, connectors, filters, service health</td></tr></tbody></table>
+<h2>Policy types</h2>
+<table><thead><tr><th>Type</th><th>Purpose</th><th>Example</th></tr></thead><tbody><tr><td>Configuration profile</td><td>Deliver settings to devices or users</td><td>Wi-Fi, VPN, restrictions, settings catalog</td></tr><tr><td>Compliance policy</td><td>Evaluate and report state</td><td>BitLocker required, minimum OS</td></tr><tr><td>Endpoint security</td><td>Security workload policies</td><td>Antivirus, firewall, ASR, BitLocker</td></tr><tr><td>App protection</td><td>Protect app data without enrolment</td><td>PIN, block copy, selective wipe</td></tr><tr><td>App configuration</td><td>Deliver settings to an app</td><td>Server URL, account name</td></tr><tr><td>Scripts and remediations</td><td>Run PowerShell on devices</td><td>Detect and fix a registry value</td></tr><tr><td>Update ring</td><td>Control Windows updates</td><td>Deferral, deadline, active hours</td></tr></tbody></table>
+<h2>Configuration profile flavours</h2>
+<table><thead><tr><th>Profile</th><th>Use when</th></tr></thead><tbody><tr><td>Settings catalog</td><td>Granular, searchable settings; the default modern choice</td></tr><tr><td>Templates</td><td>Wi-Fi, VPN, email, kiosk, device restrictions</td></tr><tr><td>Administrative templates</td><td>The setting is an ADMX policy that already exists in Group Policy</td></tr><tr><td>Custom (OMA-URI)</td><td>No catalog or ADMX entry; you supply the CSP path, type, and value</td></tr><tr><td>Security baseline</td><td>Microsoft-recommended security defaults you can customise</td></tr></tbody></table>
+<ul><li>A setting configured twice with different values reports a conflict; the device applies whichever arrives last.</li><li>Group Policy analytics imports a GPO XML export and reports which settings have Intune equivalents, partial support, or none.</li></ul>
+<h2>Assignments and filters</h2>
+<table><thead><tr><th>Control</th><th>Applies to</th><th>Notes</th></tr></thead><tbody><tr><td>Required</td><td>Users or devices</td><td>Installs automatically; can block in ESP</td></tr><tr><td>Available</td><td>Users</td><td>Self-service from Company Portal</td></tr><tr><td>Uninstall</td><td>Users or devices</td><td>Removes a required app</td></tr><tr><td>Include group</td><td>Users or devices</td><td>The audience that receives the policy</td></tr><tr><td>Exclude group</td><td>Users or devices</td><td>Wins over include</td></tr><tr><td>Assignment filter</td><td>Device or user properties</td><td>Narrows a group without new groups</td></tr><tr><td>App intent</td><td>Users or devices</td><td>Different intents can target different groups</td></tr></tbody></table>
+<ul><li>Filter properties include device name, manufacturer, model, OS version, ownership, enrolment profile name, and user attributes.</li><li>Effective assignment = include minus exclude, then the filter is evaluated on the device or user.</li></ul>
+<h2>Groups and RBAC</h2>
+<table><thead><tr><th>Object</th><th>Purpose</th></tr></thead><tbody><tr><td>Assigned group</td><td>Static membership, manually maintained</td></tr><tr><td>Dynamic user group</td><td>Rule on user attributes such as department</td></tr><tr><td>Dynamic device group</td><td>Rule on device properties such as OS, model, or ownership</td></tr><tr><td>Intune role</td><td>Set of permissions, built-in or custom</td></tr><tr><td>Role assignment</td><td>Role plus members plus scope groups plus scope tags</td></tr><tr><td>Scope tag</td><td>Labels objects so an admin sees only their slice</td></tr></tbody></table>
+<ul><li>Scope tags filter objects; scope groups bound which users and devices an admin can act on. Both belong to the role assignment.</li><li>Built-in roles include Help Desk Operator, Policy and Profile Manager, Application Manager, Endpoint Security Manager, Read Only Operator, and Intune Role Administrator.</li><li>Administrative units in Entra ID scope directory objects; they are not a substitute for Intune scope tags.</li></ul>
+<h2>Co-management and tenant attach</h2>
+<table><thead><tr><th>Workload</th><th>Can move to Intune</th><th>Stays in ConfigMgr</th></tr></thead><tbody><tr><td>Compliance policies</td><td>Yes</td><td>—</td></tr><tr><td>Device configuration</td><td>Yes</td><td>—</td></tr><tr><td>Windows Update policies</td><td>Yes</td><td>—</td></tr><tr><td>Endpoint protection</td><td>Yes</td><td>—</td></tr><tr><td>Resource access policies</td><td>Yes</td><td>—</td></tr><tr><td>Client apps</td><td>Yes</td><td>—</td></tr><tr><td>Office Click-to-Run apps</td><td>Yes</td><td>—</td></tr></tbody></table>
+<ul><li>Co-management needs ConfigMgr, cloud attach, and a pilot collection; switch workloads one at a time.</li><li>Tenant attach shows ConfigMgr devices in Intune without enrolling them and enables some Intune actions.</li><li>Co-management authority can be ConfigMgr or Intune; Intune authority is required for some cloud features.</li></ul>
+<h2>Intune Suite</h2>
+<table><thead><tr><th>Component</th><th>Solves</th></tr></thead><tbody><tr><td>Remote Help</td><td>Attended support with screen share, control, and elevation</td></tr><tr><td>Endpoint Privilege Management</td><td>Just-in-time elevation for specific apps</td></tr><tr><td>Microsoft Tunnel for MAM</td><td>Per-app VPN for unenrolled devices</td></tr><tr><td>Cloud PKI</td><td>Hosted certificate authority for Wi-Fi and VPN</td></tr><tr><td>Advanced Analytics</td><td>Longer retention and custom queries</td></tr><tr><td>Enterprise App Management</td><td>Curated app catalogue and update service</td></tr></tbody></table>
+<ul><li>Suite features are per-user add-on licences; they are not included with Windows Pro.</li><li>Remote Help capabilities follow RBAC, so elevation must be granted deliberately.</li></ul>
+<h2>Health and hygiene</h2>
+<ul><li>Device check-in is roughly every 8 hours; Sync forces an immediate check.</li><li>Tenant status shows connector health; service health shows active incidents.</li><li>Audit logs record admin actions with actor and time; stream them with diagnostic settings for retention.</li><li>Device cleanup rules retire devices that have not checked in for a set period.</li><li>Diagnostic settings send logs to Log Analytics, Event Hubs, or a storage account.</li></ul>
+<footer>MD-102 cheat sheet 2 of 5 &middot; five A4 pages &middot; unofficial study aid &middot; snapshot 2026-11</footer>
+</article>
+<article class="sheet" id="sheet-3" aria-label="Device compliance and security">
+<h1>MD-102 cheat sheet 3/5 — Device compliance and security</h1>
+<p class="note"><em>One page. Facts snapshot 2026-11; verify current behaviour on Microsoft Learn before the exam.</em></p>
+<h2>Compliance versus configuration</h2>
+<table><thead><tr><th>Question</th><th>Compliance policy</th><th>Configuration profile</th></tr></thead><tbody><tr><td>What does it do?</td><td>Evaluates and reports state</td><td>Delivers and enforces settings</td></tr><tr><td>Typical settings</td><td>BitLocker on, minimum OS, Defender on</td><td>BitLocker cipher, update ring, firewall rule</td></tr><tr><td>Result</td><td>Compliant or not compliant</td><td>Applied, error, or conflict</td></tr><tr><td>Feeds Conditional Access</td><td>Yes, through the Entra device object</td><td>No</td></tr><tr><td>Multiple policies</td><td>Cumulative; the device must meet all</td><td>Conflicts when values differ</td></tr></tbody></table>
+<ul><li>Compliance answers &quot;is it allowed?&quot;; configuration answers &quot;what is set?&quot;.</li><li>Devices with no compliance policy follow the tenant setting, which defaults to compliant. Change it to not compliant before enforcing Conditional Access.</li></ul>
+<h2>Compliance rules by platform</h2>
+<table><thead><tr><th>Control</th><th>Windows</th><th>iOS and Android</th></tr></thead><tbody><tr><td>Encryption</td><td>Require BitLocker</td><td>Require encryption</td></tr><tr><td>Health</td><td>Secure Boot, code integrity, TPM</td><td>Jailbroken or rooted block</td></tr><tr><td>Defender</td><td>Antivirus, firewall, machine risk score</td><td>Device threat level</td></tr><tr><td>OS level</td><td>Minimum and maximum OS version</td><td>Minimum and maximum OS version</td></tr><tr><td>Access</td><td>Password and lock screen rules</td><td>Password, inactivity, biometrics</td></tr><tr><td>Platform</td><td>Windows 10/11 with Defender integration</td><td>Android Enterprise, iOS, platform security</td></tr></tbody></table>
+<ul><li>Machine risk score needs Defender for Endpoint onboarding; without it the signal is missing.</li><li>Mobile threat defence settings come from a connected MTD connector.</li></ul>
+<h2>Compliance actions and timing</h2>
+<table><thead><tr><th>Action</th><th>Effect</th></tr></thead><tbody><tr><td>Send email to end users</td><td>Guidance before enforcement</td></tr><tr><td>Mark device noncompliant</td><td>Changes state after the schedule; this is the grace period</td></tr><tr><td>Remote lock</td><td>Locks the device immediately</td></tr><tr><td>Retire</td><td>Removes company data and management</td></tr></tbody></table>
+<ul><li>Actions run on a schedule; a one-day delay on Mark noncompliant is a one-day grace period.</li><li>State reaches Entra ID at check-in, so a recent fix may not show for a while. Sync first.</li><li>Retire is for BYOD departure; wipe is for reissue or compromise.</li></ul>
+<h2>Conditional Access</h2>
+<table><thead><tr><th>Building block</th><th>Examples</th></tr></thead><tbody><tr><td>Assignments</td><td>Users, groups, workload identities, directory roles</td></tr><tr><td>Conditions</td><td>User risk, sign-in risk, device platform, location, client apps, device state</td></tr><tr><td>Grant</td><td>Block, MFA, compliant device, hybrid joined, app protection, approved client app, terms of use, authentication strength</td></tr><tr><td>Session</td><td>Sign-in frequency, persistent browser, app enforced restrictions, continuous access evaluation</td></tr></tbody></table>
+<ul><li>Grants in one policy combine with AND; use separate policies for OR.</li><li>Report-only evaluates and logs without enforcing; pilot there, then turn on.</li><li>Every design needs a cloud-only break-glass account excluded from all policies and monitored.</li><li>The app protection grant is the BYOD answer; compliant and hybrid joined grants need management.</li><li>Sign-in frequency is the fixed reauthentication interval.</li><li>Intune writes compliance to the Entra device object; Conditional Access reads it at sign-in.</li></ul>
+<h2>Defender stack</h2>
+<table><thead><tr><th>Control</th><th>What it does</th></tr></thead><tbody><tr><td>Onboarding (EDR policy)</td><td>Sends device signals to Defender for Endpoint</td></tr><tr><td>Antivirus policy</td><td>Scan schedule, exclusions, cloud protection, intelligence updates</td></tr><tr><td>ASR rules</td><td>Audit, warn, or block risky behaviours</td></tr><tr><td>EDR block mode</td><td>Blocks malicious behaviour when third-party AV is primary</td></tr><tr><td>Tamper protection</td><td>Stops local changes to Defender settings</td></tr><tr><td>Live response</td><td>Remote shell for investigation and containment</td></tr><tr><td>Security baseline</td><td>Recommended configuration across many controls</td></tr></tbody></table>
+<ul><li>Pilot ASR in audit, review events, then block; scope an exception to the affected group.</li><li>Defender portal visibility is Defender RBAC plus device groups, not Intune RBAC.</li><li>Plan 2 adds EDR, automated investigation, advanced hunting, and live response.</li></ul>
+<h2>BitLocker</h2>
+<ul><li>Silent enablement needs a disk encryption policy plus a ready TPM 2.0.</li><li>TPM plus PIN adds a pre-boot secret; TPM-only is transparent to the user.</li><li>Escrow recovery keys to Entra ID or AD before encryption runs.</li><li>Rotate the recovery key after exposure; retrieval needs the narrow Intune permission.</li><li>The Encryption report shows encryption and escrow state across devices.</li></ul>
+<h2>LAPS and local privilege</h2>
+<table><thead><tr><th>Control</th><th>Scope</th></tr></thead><tbody><tr><td>Windows LAPS</td><td>Built-in local administrator password, rotation, Entra or AD backup</td></tr><tr><td>Legacy LAPS</td><td>MSI client-side extension, being retired</td></tr><tr><td>Local user group membership</td><td>Adds or removes members from Administrators and other groups</td></tr><tr><td>Endpoint Privilege Management</td><td>Just-in-time elevation for a specific app</td></tr></tbody></table>
+<ul><li>LAPS needs a supported Windows build and an existing local admin account named in the policy.</li><li>EPM keeps users standard and elevates the app, not the person.</li></ul>
+<h2>Confusion pairs</h2>
+<table><thead><tr><th>Pair</th><th>Difference</th></tr></thead><tbody><tr><td>Compliance vs configuration</td><td>Evaluates vs sets</td></tr><tr><td>Baseline vs endpoint security policy</td><td>Recommended posture vs operational settings</td></tr><tr><td>ASR audit vs block</td><td>Measure vs prevent</td></tr><tr><td>BitLocker vs LAPS</td><td>Disk key vs local account password</td></tr><tr><td>Retire vs wipe</td><td>Keep personal data vs erase the device</td></tr></tbody></table>
+<footer>MD-102 cheat sheet 3 of 5 &middot; five A4 pages &middot; unofficial study aid &middot; snapshot 2026-11</footer>
+</article>
+<article class="sheet" id="sheet-4" aria-label="Applications and updates">
+<h1>MD-102 cheat sheet 4/5 — Applications and updates</h1>
+<p class="note"><em>One page. Facts snapshot 2026-11; verify current behaviour on Microsoft Learn before the exam.</em></p>
+<h2>App types</h2>
+<table><thead><tr><th>Type</th><th>Use for</th><th>Detection</th></tr></thead><tbody><tr><td>Windows app (Win32)</td><td>EXE or MSI with custom logic</td><td>File, registry, MSI product code, script</td></tr><tr><td>Line-of-business (MSI)</td><td>Simple MSI or MSIX</td><td>Product code or file</td></tr><tr><td>Microsoft Store app</td><td>Packaged Store apps</td><td>Store identity</td></tr><tr><td>Microsoft 365 Apps</td><td>Office</td><td>Built in</td></tr><tr><td>Web link</td><td>URL shortcut</td><td>None</td></tr><tr><td>Managed Google Play</td><td>Android Enterprise apps</td><td>Play approval</td></tr></tbody></table>
+<ul><li>Win32 content is wrapped with IntuneWinAppUtil.exe into an .intunewin file.</li><li>Win32 needs install and uninstall commands, a detection rule, and optionally requirement rules.</li><li>Store apps update themselves; Win32 apps need a new version or supersedence.</li></ul>
+<h2>Win32 mechanics</h2>
+<table><thead><tr><th>Element</th><th>Purpose</th></tr></thead><tbody><tr><td>Install command</td><td>Runs the installer, for example msiexec /i app.msi /qn</td></tr><tr><td>Uninstall command</td><td>Removes the app</td></tr><tr><td>Detection rule</td><td>Proves the app is already installed</td></tr><tr><td>Requirement rule</td><td>Gates whether the app is offered</td></tr><tr><td>Install context</td><td>System for HKLM and no-user installs, user for per-user</td></tr><tr><td>Return code</td><td>0 success, 3010 soft reboot, 1641 hard reboot, 1618 retry, 1603 fatal</td></tr></tbody></table>
+<ul><li>Detection is &quot;is it there?&quot;; requirement is &quot;should it be there?&quot;.</li><li>Supersedence replaces an older version and can uninstall it; a dependency installs a prerequisite first.</li><li>ESP can block the desktop until required apps install; only required apps can be tracked.</li><li>Win32 logs: IntuneManagementExtension.log and AppWorkload.log on the device.</li></ul>
+<h2>Assignments</h2>
+<table><thead><tr><th>Intent</th><th>Behaviour</th></tr></thead><tbody><tr><td>Required</td><td>Installs automatically</td></tr><tr><td>Available</td><td>User installs from Company Portal</td></tr><tr><td>Uninstall</td><td>Removes a required app</td></tr><tr><td>Include and exclude</td><td>Exclude wins</td></tr><tr><td>Filter</td><td>Narrows by device or user property</td></tr></tbody></table>
+<ul><li>To retire an app but keep its history, change the intent to uninstall; delete the object only when reporting is no longer needed.</li><li>Self-service failures are usually targeting or requirement rules.</li></ul>
+<h2>Microsoft 365 Apps</h2>
+<table><thead><tr><th>Channel</th><th>Feature update cadence</th></tr></thead><tbody><tr><td>Current Channel</td><td>Monthly, fastest</td></tr><tr><td>Monthly Enterprise Channel</td><td>Monthly on a predictable schedule</td></tr><tr><td>Semi-Annual Enterprise Channel</td><td>Roughly twice a year</td></tr><tr><td>Semi-Annual Extended</td><td>Extended support for specific builds</td></tr></tbody></table>
+<ul><li>Use the Microsoft 365 Apps app type, choose architecture and apps, and apply an XML configuration if needed.</li><li>Click-to-Run supports channels and streaming; MSI Office is legacy.</li><li>Office settings can also come from cloud policy.</li></ul>
+<h2>MAM versus MDM</h2>
+<table><thead><tr><th>Capability</th><th>MAM (app protection)</th><th>MDM (enrolment)</th></tr></thead><tbody><tr><td>Device enrolment</td><td>Not required</td><td>Required</td></tr><tr><td>Protects</td><td>Data inside managed apps</td><td>Whole-device configuration</td></tr><tr><td>Wipe</td><td>Selective, app data only</td><td>Full device wipe</td></tr><tr><td>Compliance signal</td><td>No</td><td>Yes</td></tr><tr><td>Conditional Access grant</td><td>App protection</td><td>Compliant or hybrid joined</td></tr><tr><td>Target</td><td>Users</td><td>Users or devices</td></tr></tbody></table>
+<ul><li>App protection areas: data protection and access requirements (conditional launch). App configuration is a separate policy.</li><li>Conditional launch handles PIN, jailbreak or root, minimum OS, and threat level.</li><li>Multi-identity lets personal and work accounts coexist with protection on work only.</li><li>Multiple app protection policies combine restrictively, like compliance.</li><li>Selective wipe removes corporate data on BYOD; a full wipe is never the BYOD answer.</li></ul>
+<h2>Update types</h2>
+<table><thead><tr><th>Type</th><th>What it contains</th></tr></thead><tbody><tr><td>Quality update</td><td>Monthly security and reliability fixes</td></tr><tr><td>Feature update</td><td>New Windows version</td></tr><tr><td>Driver update</td><td>Hardware driver fixes, targetable by model</td></tr><tr><td>Definition update</td><td>Defender security intelligence</td></tr></tbody></table>
+<h2>Update rings</h2>
+<table><thead><tr><th>Setting</th><th>Effect</th></tr></thead><tbody><tr><td>Deferral</td><td>Delays updates by a number of days</td></tr><tr><td>Deadline</td><td>Forces installation by a date</td></tr><tr><td>Grace period</td><td>Postponement allowed before the deadline</td></tr><tr><td>Active hours</td><td>Prevents restarts during working time</td></tr><tr><td>Pause</td><td>Temporarily stops updates</td></tr><tr><td>Delivery Optimization</td><td>Peer caching to save WAN bandwidth</td></tr></tbody></table>
+<ul><li>One device, one update ring; two rings with different values create a conflict.</li><li>Feature update policies target a version with a rollout date and a deadline.</li><li>Quality deferral delays patches; feature deferral delays versions; active hours only move the restart.</li><li>The Windows Update compliance report shows devices missing updates.</li></ul>
+<h2>Servicing and automation</h2>
+<table><thead><tr><th>Option</th><th>Use when</th></tr></thead><tbody><tr><td>General Availability Channel</td><td>Stay current with annual feature updates</td></tr><tr><td>LTSC</td><td>Fixed feature set for years, appliances and certified apps</td></tr><tr><td>Windows Autopatch</td><td>Microsoft manages rings; needs E3/E5</td></tr><tr><td>Hotpatch</td><td>No-restart monthly updates on Windows 11 Enterprise 24H2+ with VBS</td></tr><tr><td>WSUS</td><td>On-premises update infrastructure, not cloud-managed</td></tr><tr><td>WUfB</td><td>Cloud-managed updates through Intune</td></tr></tbody></table>
+<ul><li>Autopatch rings run test, first, fast, broad; the test ring receives updates first.</li><li>Hotpatch still needs a quarterly baseline restart.</li><li>Bandwidth complaints point to Delivery Optimization; timing complaints point to rings.</li></ul>
+<footer>MD-102 cheat sheet 4 of 5 &middot; five A4 pages &middot; unofficial study aid &middot; snapshot 2026-11</footer>
+</article>
+<article class="sheet" id="sheet-5" aria-label="Troubleshooting and administration">
+<h1>MD-102 cheat sheet 5/5 — Troubleshooting and administration</h1>
+<p class="note"><em>One page. Facts snapshot 2026-11; verify current behaviour on Microsoft Learn before the exam.</em></p>
+<h2>Where to look first</h2>
+<table><thead><tr><th>Symptom</th><th>First stop</th></tr></thead><tbody><tr><td>Policy not applying</td><td>Assignment, exclusion, filter, then device sync</td></tr><tr><td>Setting shows conflict</td><td>Two profiles set the same value</td></tr><tr><td>App not installing</td><td>App install report, then IME logs</td></tr><tr><td>Update failing</td><td>Update compliance report, then Windows Update logs</td></tr><tr><td>Compliance stale</td><td>Device check-in, then manual sync</td></tr><tr><td>Many users affected</td><td>Service health and tenant status</td></tr></tbody></table>
+<h2>Logs and tools</h2>
+<table><thead><tr><th>Tool or log</th><th>Contains</th></tr></thead><tbody><tr><td>IntuneManagementExtension.log</td><td>Win32 apps, PowerShell scripts, remediations</td></tr><tr><td>AppWorkload.log</td><td>App download, install, and detection detail</td></tr><tr><td>DeviceManagement-Enterprise-Diagnostics-Provider</td><td>MDM policy and CSP events</td></tr><tr><td>dsregcmd /status</td><td>Join state, PRT, tenant details</td></tr><tr><td>Collect diagnostics</td><td>Silent bundle of registry, logs, and system info</td></tr><tr><td>Company Portal logs</td><td>User-side enrolment and app issues</td></tr><tr><td>Autopilot diagnostics</td><td>Profile, ESP, and deployment detail</td></tr><tr><td>Audit logs</td><td>Admin actions with actor and time</td></tr></tbody></table>
+<ul><li>Order of work: assignment, filter, sync, status report, device logs, escalation.</li><li>Sync is the least invasive action and the right first step for delivery lag.</li><li>Collect diagnostics avoids interrupting the user.</li></ul>
+<h2>Error codes</h2>
+<table><thead><tr><th>Code</th><th>Meaning</th></tr></thead><tbody><tr><td>0</td><td>Success</td></tr><tr><td>3010</td><td>Success, soft reboot required</td></tr><tr><td>1641</td><td>Success, hard reboot initiated</td></tr><tr><td>1618</td><td>Another installation in progress, retry</td></tr><tr><td>1603</td><td>Fatal MSI error: rights, prerequisite, or existing version</td></tr><tr><td>0x87D1xxxx</td><td>Intune policy or app enforcement error</td></tr></tbody></table>
+<ul><li>A non-zero code is not automatically a failure; check the configured return codes.</li><li>1603 needs the installer log, not a blind retry.</li></ul>
+<h2>Remote actions</h2>
+<table><thead><tr><th>Action</th><th>What it preserves</th><th>Use when</th></tr></thead><tbody><tr><td>Sync</td><td>Everything</td><td>Force a check-in</td></tr><tr><td>Restart</td><td>Everything</td><td>Pending reboot</td></tr><tr><td>Collect diagnostics</td><td>Everything</td><td>Need logs without disruption</td></tr><tr><td>Remote lock</td><td>Data, needs PIN</td><td>Lost device, possible recovery</td></tr><tr><td>Reset passcode</td><td>Data</td><td>Forgotten local credential</td></tr><tr><td>Retire</td><td>Personal data</td><td>BYOD leaving the organisation</td></tr><tr><td>Wipe</td><td>Nothing</td><td>Reissue, compromise, lost beyond recovery</td></tr><tr><td>Fresh Start</td><td>User files</td><td>Rebuild Windows, remove OEM apps</td></tr><tr><td>Autopilot Reset</td><td>Enrolment and Autopilot record</td><td>Return to OOBE for reprovisioning</td></tr><tr><td>Delete record</td><td>Device untouched</td><td>Stale record only</td></tr><tr><td>Rotate BitLocker key</td><td>Data</td><td>Key exposure</td></tr></tbody></table>
+<ul><li>Wipe versus retire is the most tested pair: reissue equals wipe, personal device equals retire.</li><li>Delete is record-keeping, not security; a joined device can re-enrol and reappear.</li><li>Bulk actions scale lifecycle work and produce a monitorable job.</li><li>Lost device playbook: lock, monitor, then wipe at a decision point.</li></ul>
+<h2>Reports</h2>
+<table><thead><tr><th>Report</th><th>Answers</th></tr></thead><tbody><tr><td>Compliance</td><td>Which devices meet policy</td></tr><tr><td>Configuration profile status</td><td>Success, error, and conflict per device</td></tr><tr><td>App install status</td><td>Installed, failed, and pending per device</td></tr><tr><td>Windows Update compliance</td><td>Missing or failed updates</td></tr><tr><td>Encryption</td><td>BitLocker and escrow state</td></tr><tr><td>Endpoint analytics</td><td>Startup score and performance</td></tr><tr><td>Autopilot deployment</td><td>Provisioning success and failures</td></tr><tr><td>Defender portal</td><td>Incidents, alerts, and device risk</td></tr></tbody></table>
+<ul><li>Export compliance and audit data through reports or the Graph API for evidence.</li><li>Diagnostic settings stream logs to Log Analytics, Event Hubs, or storage.</li></ul>
+<h2>Administration hygiene</h2>
+<ul><li>Audit logs answer &quot;who changed what&quot;; device telemetry does not.</li><li>Cleanup rules retire inactive devices; review stale records on a schedule.</li><li>Tenant status shows connector health; service health shows incidents.</li><li>Remote Help is attended support; lifecycle actions are separate.</li><li>Scope tags and RBAC limit what an admin can see and do.</li></ul>
+<h2>Rapid-fire confusion pairs</h2>
+<table><thead><tr><th>Pair</th><th>One-line difference</th></tr></thead><tbody><tr><td>Registered vs joined vs hybrid</td><td>Identity only vs cloud management vs both directories</td></tr><tr><td>Compliance vs configuration</td><td>Evaluates vs configures</td></tr><tr><td>Wipe vs retire vs Fresh Start</td><td>Erase all vs remove company data vs rebuild and keep files</td></tr><tr><td>MDM vs MAM</td><td>Device control vs app data protection</td></tr><tr><td>SCEP vs PKCS</td><td>NDES and a challenge vs a certificate connector to the CA</td></tr><tr><td>Scope tag vs RBAC</td><td>Object label vs permission assignment</td></tr><tr><td>Supersedence vs dependency</td><td>Replace a version vs install a prerequisite</td></tr><tr><td>Deferral vs deadline</td><td>Delay vs enforce</td></tr><tr><td>Report-only vs enforced</td><td>Observe vs apply</td></tr><tr><td>Autopilot Reset vs Fresh Start</td><td>Keep enrolment vs keep user files</td></tr></tbody></table>
+<footer>MD-102 cheat sheet 5 of 5 &middot; five A4 pages &middot; unofficial study aid &middot; snapshot 2026-11</footer>
+</article>
+</main>
+</body>
+</html>
